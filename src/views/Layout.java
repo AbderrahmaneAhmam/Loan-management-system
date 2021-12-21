@@ -1,37 +1,56 @@
 
 package views;
 
+import controllers.LayoutController;
+
 import javax.swing.*;
-import java.awt.*;
+import java.util.ArrayList;
 
 
 public class Layout extends JFrame {
-    JPanel globalPanel;
-    JPanel leftPanel;
-    JButton btn1;
-    JButton btn2;
-    JButton btn3;
-
+    public JPanel mainPanel;
+    JMenuBar menu;
+    JMenu menuUsers;
+    JMenu menuMaterials;
+    JMenu menuLoans;
+    JMenu themeMenu;
+    private final ArrayList<JMenuItem> itemsMaterials = new ArrayList<JMenuItem>();
+    private final ArrayList<JMenuItem> itemsUsers = new ArrayList<JMenuItem>();
+    private final ArrayList<JMenuItem> itemsLoans = new ArrayList<JMenuItem>();
+    private final ArrayList<JMenuItem> itemstheme = new ArrayList<JMenuItem>();
+    private final LayoutController controller = new LayoutController(this);
     public Layout() {
         super("Gestion Emprunts");
-        globalPanel = new JPanel();
-        leftPanel = new JPanel();
-        btn1=new JButton("Materials");
-        btn2=new JButton("Users");
-        btn3=new JButton("Emprunts");
+        mainPanel = new JPanel();
+        menu = new JMenuBar();
+        menuUsers = new JMenu("Utilisateurs");
+        menuMaterials = new JMenu("Matériels");
+        menuLoans = new JMenu("Emprunts");
+        themeMenu = new JMenu("Thèmes");
+        itemstheme.add(new JMenuItem("Dark"));
+        itemstheme.add(new JMenuItem("Light"));
+        itemsMaterials.add(new JMenuItem("Add"));
         initComponents();
     }
     private void initComponents() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        globalPanel.setLayout(new BorderLayout());
-        leftPanel.setLayout(new GridLayout(3,1));
-        btn1.setSize(200,100);
-        leftPanel.add(btn1);
-        leftPanel.add(btn2);
-        leftPanel.add(btn3);
-        globalPanel.add(leftPanel,BorderLayout.LINE_START);
-        this.add(globalPanel);
+        for (var item :
+                itemstheme) {
+            item.addActionListener(e->controller.themeChange(((JMenuItem)e.getSource()).getText()));
+            themeMenu.add(item);
+        }
+        for (var item :
+                itemsMaterials) {
+            item.addActionListener(e->controller.mainChange("main"));
+            menuMaterials.add(item);
+        }
+        menu.add(menuUsers);
+        menu.add(menuMaterials);
+        menu.add(menuLoans);
+        menu.add(themeMenu);
+        this.setJMenuBar(menu);
+        this.add(mainPanel);
         this.setVisible(true);
     }
 }

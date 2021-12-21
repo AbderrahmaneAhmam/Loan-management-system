@@ -5,12 +5,13 @@ import common.interfaces.IMaterialsManager;
 import common.interfaces.IUsersManager;
 
 public class AppSDK {
-    private DBManager db;
-    public IMaterialsManager MaterialsManager;
-    public IUsersManager UsersManager;
-    public ILoansManager LoansManager;
+    public static DBManager db;
+    public static IMaterialsManager MaterialsManager;
+    public static IUsersManager UsersManager;
+    public static ILoansManager LoansManager;
 
     public AppSDK(){
         db = new DBManager();
+        UsersManager = new UsersManager(db);
     }
 }
