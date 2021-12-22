@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DBManager {
+class DBManager {
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DB_IP = "127.0.0.1";
     private static final String DB_PORT = "3306";

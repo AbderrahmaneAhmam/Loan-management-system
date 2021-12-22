@@ -4,11 +4,11 @@ package views;
 import controllers.LayoutController;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
 public class Layout extends JFrame {
-    public JPanel mainPanel;
     JMenuBar menu;
     JMenu menuUsers;
     JMenu menuMaterials;
@@ -17,18 +17,17 @@ public class Layout extends JFrame {
     private final ArrayList<JMenuItem> itemsMaterials = new ArrayList<JMenuItem>();
     private final ArrayList<JMenuItem> itemsUsers = new ArrayList<JMenuItem>();
     private final ArrayList<JMenuItem> itemsLoans = new ArrayList<JMenuItem>();
-    private final ArrayList<JMenuItem> itemstheme = new ArrayList<JMenuItem>();
+    private final ArrayList<JMenuItem> itemsTheme = new ArrayList<JMenuItem>();
     private final LayoutController controller = new LayoutController(this);
-    public Layout() {
+    public Layout() throws IOException {
         super("Gestion Emprunts");
-        mainPanel = new JPanel();
         menu = new JMenuBar();
         menuUsers = new JMenu("Utilisateurs");
         menuMaterials = new JMenu("Matériels");
         menuLoans = new JMenu("Emprunts");
         themeMenu = new JMenu("Thèmes");
-        itemstheme.add(new JMenuItem("Dark"));
-        itemstheme.add(new JMenuItem("Light"));
+        itemsTheme.add(new JMenuItem("Dark"));
+        itemsTheme.add(new JMenuItem("Light"));
         itemsMaterials.add(new JMenuItem("Add"));
         initComponents();
     }
@@ -36,13 +35,12 @@ public class Layout extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         for (var item :
-                itemstheme) {
+                itemsTheme) {
             item.addActionListener(e->controller.themeChange(((JMenuItem)e.getSource()).getText()));
             themeMenu.add(item);
         }
         for (var item :
                 itemsMaterials) {
-            item.addActionListener(e->controller.mainChange("main"));
             menuMaterials.add(item);
         }
         menu.add(menuUsers);
@@ -50,7 +48,13 @@ public class Layout extends JFrame {
         menu.add(menuLoans);
         menu.add(themeMenu);
         this.setJMenuBar(menu);
-        this.add(mainPanel);
+
+        JTabbedPane tabs = new JTabbedPane();
+        tabs.addTab( "Consultation", new JScrollPane( new JTree() ) );
+        tabs.addTab( "Ajouter emprunt", new JScrollPane() );
+        tabs.addTab( "Retour emprunt", new JScrollPane() );
+
+        this.add(tabs);
         this.setVisible(true);
     }
 }
