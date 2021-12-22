@@ -6,16 +6,17 @@ import views.Layout;
 import views.MainView;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class LayoutController {
-    private Layout layout;
+    private final Layout layout;
     final Map<String,JPanel> views = new HashMap<String, JPanel>();
-    private String currentPage="main";
-    public LayoutController(Layout layout) {
+
+    public LayoutController(Layout layout) throws IOException {
         this.layout = layout;
         views.put("main",new MainView());
     }
@@ -30,12 +31,5 @@ public class LayoutController {
         } catch (Exception e) {
             System.err.println(e);
         }
-    }
-    public void mainChange(String name){
-        var data = views.get(name);
-        layout.mainPanel.removeAll();
-        layout.mainPanel.add(new MainView());
-        currentPage = name;
-        SwingUtilities.updateComponentTreeUI(layout);
     }
 }

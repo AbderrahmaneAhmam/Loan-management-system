@@ -1,6 +1,6 @@
 package managers;
 
-public class Manager {
+class Manager {
     protected DBManager db;
     public Manager(DBManager db){
         this.db=db;

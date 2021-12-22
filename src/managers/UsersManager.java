@@ -5,7 +5,7 @@ import models.UserModel;
 
 import java.util.ArrayList;
 
-public class UsersManager extends Manager implements IUsersManager {
+class UsersManager extends Manager implements IUsersManager {
 
     public UsersManager(DBManager db) {
         super(db);
