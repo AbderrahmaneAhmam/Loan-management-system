@@ -1,31 +1,70 @@
 package views;
 
+import controllers.MainController;
+import controls.ButtonEditorTable;
+import controls.ButtonRendererTable;
+import controls.CustomDialog;
+import models.MaterialModel;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.IOException;
 
 public class MainView extends JPanel {
-    JLabel label;
+    private final MainController controller;
+    private final JPanel globalPanel;
+    private final JPanel topPanel;
+    private final JPanel searchPanel;
+    private final JPanel btnsPanel;
+    private final JTable table;
+    private final JScrollPane scroller;
+    private final JButton tableBtn;
+    private final JButton btnSearch;
+    private final JButton btnAddUser;
+    private final JTextField txtSearch;
+    public MainView(){
+        controller = new MainController();
+        table = new JTable();
+        tableBtn = new JButton("Loan");
+        scroller = new javax.swing.JScrollPane();
+        globalPanel = new JPanel();
+        topPanel = new JPanel();
+        btnSearch = new JButton("Search");
+        txtSearch = new JTextField("",20);
+        searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        btnsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        btnAddUser = new JButton("Add user");
+        initComponents();
+    }
+    private void initComponents(){
+        globalPanel.setLayout(new BorderLayout());
+        topPanel.setLayout(new GridLayout(1,2));
+        scroller.setViewportView(table);
+        this.setLayout(new GridLayout(2,1));
 
-    public MainView() throws IOException {
+        table.setModel(controller.getAccountsTableModel());
+        table.getColumn("").setCellRenderer(new ButtonRendererTable("Loan"));
+        table.getColumn("").setCellEditor(new ButtonEditorTable(new JCheckBox(),tableBtn));
 
-        // --- On crée le conteneur d'onglets (partie gauche) ---
-        JTabbedPane tabs = new JTabbedPane();
-        // --- Premier onglet et son composant associé ---
-        tabs.addTab( "Explorer", new JScrollPane( new JTree() ) );
+        btnsPanel.add(btnAddUser);
 
-        // --- Second onglet et son composant associé ---
-        JEditorPane helpPane = new JEditorPane();
-        helpPane.setEditable( false );
-        //helpPane.setPage( "file:docs/index.html" );
-        tabs.addTab( "Help", new JScrollPane( helpPane ) );
+        searchPanel.add(txtSearch);
+        searchPanel.add(btnSearch);
 
-        // --- On crée un éditeur (partie droite) ---
-        JTextArea editor = new JTextArea();
-        JScrollPane scrollEditor = new JScrollPane( editor );
+        topPanel.add(btnsPanel);
+        topPanel.add(searchPanel);
 
-        // -- On assemble la partie gauche et la partir droite dans un splitter ---
-        JSplitPane splitter = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, tabs, scrollEditor );
-        this.add(tabs);
+        globalPanel.add(topPanel,BorderLayout.PAGE_START);
+        globalPanel.add(scroller,BorderLayout.CENTER);
+
+        tableBtn.addActionListener((e)->{
+            var row = ((DefaultTableModel)table.getModel()).getDataVector().elementAt(table.getSelectedRow());
+            var material = new MaterialModel((int)row.get(0),row.get(1).toString(),"");
+            var d = new CustomDialog((JFrame) SwingUtilities.getWindowAncestor(this),"Add loan",new AddLoanView(material));
+        });
+        btnSearch.addActionListener(e-> controller.refreshTable(txtSearch.getText()));
+        btnAddUser.addActionListener(e->{
+            var d = new CustomDialog((JFrame) SwingUtilities.getWindowAncestor(this),"Add user",new AddUserView());
+        });
+        this.add(globalPanel);
     }
 }

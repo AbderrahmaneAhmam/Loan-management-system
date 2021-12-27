@@ -1,12 +1,10 @@
-
 package views;
 
 import controllers.LayoutController;
-
+import managers.AppSDK;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
-
 
 public class Layout extends JFrame {
     JMenuBar menu;
@@ -25,15 +23,23 @@ public class Layout extends JFrame {
         menuUsers = new JMenu("Utilisateurs");
         menuMaterials = new JMenu("Matériels");
         menuLoans = new JMenu("Emprunts");
-        themeMenu = new JMenu("Thèmes");
+        themeMenu = new JMenu("Theme");
         itemsTheme.add(new JMenuItem("Dark"));
         itemsTheme.add(new JMenuItem("Light"));
         itemsMaterials.add(new JMenuItem("Add"));
+        try {
+            var data = AppSDK.UsersManager.getUsers();
+            System.out.println(data);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         initComponents();
     }
-    private void initComponents() {
+    private void initComponents(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        this.setSize(700,500);
         for (var item :
                 itemsTheme) {
             item.addActionListener(e->controller.themeChange(((JMenuItem)e.getSource()).getText()));
@@ -50,10 +56,9 @@ public class Layout extends JFrame {
         this.setJMenuBar(menu);
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab( "Consultation", new JScrollPane( new JTree() ) );
-        tabs.addTab( "Ajouter emprunt", new JScrollPane() );
-        tabs.addTab( "Retour emprunt", new JScrollPane() );
-
+        tabs.addTab( "Main", new JScrollPane( new MainView() ) );
+        tabs.addTab( "User consultation", new JScrollPane() );
+        tabs.addTab( "Material back", new JScrollPane() );
         this.add(tabs);
         this.setVisible(true);
     }
