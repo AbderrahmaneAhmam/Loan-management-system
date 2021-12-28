@@ -5,4 +5,5 @@ class Manager {
     public Manager(DBManager db){
         this.db=db;
     }
+
 }

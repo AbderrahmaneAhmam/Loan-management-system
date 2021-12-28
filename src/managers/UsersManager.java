@@ -3,7 +3,6 @@ package managers;
 import common.interfaces.IUsersManager;
 import models.UserModel;
 
-import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -27,32 +26,109 @@ class UsersManager extends Manager implements IUsersManager {
     }
 
     @Override
-    public boolean addUser() {
-        return false;
+    public boolean addUser(UserModel user) throws SQLException {
+        try {
+                var prs = db.getConnection().prepareStatement("insert into users(first_Name,last_Name,email) values (?,?,?)");
+                prs.setString(1, user.getFirstName());
+                prs.setString(2, user.getLastName());
+                prs.setString(3, user.getEmail());
+
+                int row = prs.executeUpdate();
+
+                if (row == 0){
+                    return false;
+            }
+
+            return true;
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            return false;
+        }
+
     }
 
     @Override
     public boolean updateUser(UserModel user) {
-        return false;
+        try {
+            var prs = db.getConnection().prepareStatement("Update users set first_Name = ?, last_Name = ? , email = ? where id = ?");
+            prs.setString(1,user.getFirstName() );
+            prs.setString(2, user.getLastName());
+            prs.setString(3, user.getEmail());
+            prs.setInt(4, user.getId());
+            int row = prs.executeUpdate();
+
+
+            return true;
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            return false;
+        }
     }
 
     @Override
     public boolean deleteUser(UserModel user) {
-        return false;
+        try {
+
+            var prs = db.getConnection().prepareStatement("delete from users where id = ?");
+            prs.setInt(1,user.getId());
+            int row = prs.executeUpdate();
+
+           if (row != 1){
+               return false;
+           }
+           return true;
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            return false;
+        }
     }
 
     @Override
     public boolean deleteUser(int id) {
-        return false;
+        try{
+        var prs = db.getConnection().prepareStatement("delete from users where id = ?");
+        prs.setInt(1,id);
+        int row = prs.executeUpdate();
+
+        if (row != 1){
+            return false;
+        }
+        return true;
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            return false;
+        }
     }
 
     @Override
     public UserModel getUserByEmail(String email) {
-        return null;
-    }
+        try {
+
+            var prs = db.getConnection().prepareStatement("SELECT * FROM `users` WHERE email = ?");
+            prs.setString(1,email);
+            var rs = prs.executeQuery();
+            //exception
+            return new UserModel(rs.getInt(1), rs.getString(2) , rs.getString(3), rs.getString(4));
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            return null;
+        }    }
 
     @Override
-    public ArrayList<UserModel> getUsersByName(String name) {
-        return null;
+    public ArrayList<UserModel> getUsersByName(String name) throws SQLException {
+        try {
+            var prs = db.getConnection().prepareStatement("select * from users where first_name like ? ");
+            prs.setString(1,"%"+name+"%");
+            var rs = prs.executeQuery();
+            var Ausers = new ArrayList<UserModel>();
+            while(rs.next()){
+                Ausers.add(new UserModel(rs.getInt(1),rs.getString(2), rs.getString(3),rs.getString(4)));
+            }
+            return Ausers;
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            return null;
+        }
+
     }
 }
