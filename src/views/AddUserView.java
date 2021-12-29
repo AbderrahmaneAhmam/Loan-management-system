@@ -1,20 +1,25 @@
 package views;
 
+import common.interfaces.AddNotification;
 import controllers.AddUserController;
 import models.UserModel;
+import sun.misc.Signal;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class AddUserView extends JPanel {
-    private JTextField firstName,lastName,email;
-    private JLabel lfname,llname,lemail;
-    private JPanel p1_1,p1_2,p2_1,p2_2,p3_1,p3_2,p4;
-    private JButton btnAdd;
-    private AddUserController controller;
+    private ArrayList<AddNotification> eventListeners;
+    private final JTextField firstName,lastName,email;
+    private final JLabel lfname,llname,lemail;
+    private final JPanel p1_1,p1_2,p2_1,p2_2,p3_1,p3_2,p4;
+    private final JButton btnAdd;
+    private final AddUserController controller;
 
     public AddUserView() {
+        eventListeners = new ArrayList<>();
         firstName = new JTextField(20);
         lastName = new JTextField(20);
         email = new JTextField(20);
@@ -29,7 +34,7 @@ public class AddUserView extends JPanel {
         p3_1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         p3_2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         p4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        controller = new AddUserController(this);
+        controller = new AddUserController(this,eventListeners);
         initComponents();
     }
     private void initComponents(){
@@ -51,5 +56,8 @@ public class AddUserView extends JPanel {
         this.add(new JLabel());
         this.add(p4);
         btnAdd.addActionListener(e-> controller.AddUserAction(new UserModel(0,firstName.getText(),lastName.getText(),email.getText())));
+    }
+    public void addEventListener(AddNotification notify){
+        eventListeners.add(notify);
     }
 }

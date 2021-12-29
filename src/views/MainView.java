@@ -59,7 +59,7 @@ public class MainView extends JPanel {
         tableBtn.addActionListener((e)->{
             var row = ((DefaultTableModel)table.getModel()).getDataVector().elementAt(table.getSelectedRow());
             var material = new MaterialModel((int)row.get(0),row.get(1).toString(),"");
-            var d = new CustomDialog((JFrame) SwingUtilities.getWindowAncestor(this),"Add loan",new AddLoanView(material),500,400);
+            var d = new CustomDialog((JFrame) SwingUtilities.getWindowAncestor(this),"Add loan",new AddLoanView(material),500,200);
         });
         btnSearch.addActionListener(e-> controller.refreshTable(txtSearch.getText()));
         btnAddUser.addActionListener(e->{
