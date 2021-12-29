@@ -4,50 +4,52 @@ import controllers.AddUserController;
 import models.UserModel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class AddUserView extends JPanel {
     private JTextField firstName,lastName,email;
     private JLabel lfname,llname,lemail;
+    private JPanel p1_1,p1_2,p2_1,p2_2,p3_1,p3_2,p4;
     private JButton btnAdd;
     private AddUserController controller;
 
     public AddUserView() {
-        firstName = new JTextField();
-        lastName = new JTextField();
-        email = new JTextField();
+        firstName = new JTextField(20);
+        lastName = new JTextField(20);
+        email = new JTextField(20);
         lfname = new JLabel("First name");
         llname = new JLabel("Last name");
         lemail = new JLabel("Email");
         btnAdd = new JButton("Add");
+        p1_1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1_2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        p2_1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2_2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        p3_1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3_2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        p4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         controller = new AddUserController(this);
         initComponents();
     }
     private void initComponents(){
-        JPanel p1 = new JPanel();
-        p1.setPreferredSize(new Dimension(0,100));
-        JPanel p2 = new JPanel();
-        p2.setPreferredSize(new Dimension(0,100));
-        JPanel p3 = new JPanel();
-        p3.setPreferredSize(new Dimension(0,100));
-        var dim = new Dimension(200,25);
-        firstName.setPreferredSize(dim);
-        lfname.setPreferredSize(dim);
-        lastName.setPreferredSize(dim);
-        llname.setPreferredSize(dim);
-        email.setPreferredSize(dim);
-        lemail.setPreferredSize(dim);
-        this.add(p1);
-        this.add(lfname);
-        this.add(firstName);
-        this.add(p2);
-        this.add(llname);
-        this.add(lastName);
-        this.add(p3);
-        this.add(lemail);
-        this.add(email);
-        this.add(p1);
-        this.add(btnAdd,"center");
+        this.setLayout(new GridLayout(4,2));
+        this.setMinimumSize(new Dimension(500,300));
+        p1_1.add(lfname);
+        p1_2.add(firstName);
+        p2_1.add(llname);
+        p2_2.add(lastName);
+        p3_1.add(lemail);
+        p3_2.add(email);
+        p4.add(btnAdd);
+        this.add(p1_1);
+        this.add(p1_2);
+        this.add(p2_1);
+        this.add(p2_2);
+        this.add(p3_1);
+        this.add(p3_2);
+        this.add(new JLabel());
+        this.add(p4);
         btnAdd.addActionListener(e-> controller.AddUserAction(new UserModel(0,firstName.getText(),lastName.getText(),email.getText())));
     }
 }
