@@ -56,8 +56,8 @@ public class Layout extends JFrame {
         this.setJMenuBar(menu);
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab( "Main", new JScrollPane( new MainView() ) );
-        tabs.addTab( "User consultation", new JScrollPane() );
+        tabs.addTab( "Main", new MainView());
+        tabs.addTab( "User consultation", new ConsultationUsersView());
         tabs.addTab( "Material back", new JScrollPane() );
         this.add(tabs);
         this.setVisible(true);

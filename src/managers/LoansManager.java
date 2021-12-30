@@ -4,8 +4,6 @@ import common.interfaces.ILoansManager;
 import models.LoansModel;
 import models.MaterialModel;
 import models.UserModel;
-
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
