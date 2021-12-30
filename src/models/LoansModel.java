@@ -1,8 +1,7 @@
 package models;
 
-import jdk.jfr.Timespan;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class LoansModel {
     private int id;

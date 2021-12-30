@@ -19,7 +19,6 @@ public class AddUserController {
     }
 
     public void AddUserAction(UserModel user){
-
         if(user.getFirstName().trim().equals("") || user.getLastName().trim().equals("") || user.getEmail().trim().equals("")){
             JOptionPane.showMessageDialog(source,"field empty!!\nplease complete all fields","Warning",JOptionPane.WARNING_MESSAGE);
             return;

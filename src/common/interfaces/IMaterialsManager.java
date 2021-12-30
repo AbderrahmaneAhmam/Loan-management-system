@@ -12,5 +12,5 @@ public interface IMaterialsManager {
     ArrayList<MaterialModel> getAvailableMaterialsByName(String name) throws SQLException;
     boolean addMaterial(MaterialModel material) throws SQLException;
     boolean updateMaterial(MaterialModel material);
-    boolean deleteMaterial(MaterialModel material);
+    boolean deleteMaterial(MaterialModel material) throws SQLException;
 }
