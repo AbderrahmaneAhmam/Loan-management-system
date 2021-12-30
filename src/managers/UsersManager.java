@@ -117,8 +117,10 @@ class UsersManager extends Manager implements IUsersManager {
     @Override
     public ArrayList<UserModel> getUsersByName(String name) throws SQLException {
         try {
-            var prs = db.getConnection().prepareStatement("select * from users where first_name like ? ");
+            var prs = db.getConnection().prepareStatement("select * from users where first_name like ? or last_name like ? or email like ?");
             prs.setString(1,"%"+name+"%");
+            prs.setString(2,"%"+name+"%");
+            prs.setString(3,"%"+name+"%");
             var rs = prs.executeQuery();
             var Ausers = new ArrayList<UserModel>();
             while(rs.next()){
