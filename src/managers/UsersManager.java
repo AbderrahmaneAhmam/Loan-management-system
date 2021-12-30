@@ -103,16 +103,16 @@ class UsersManager extends Manager implements IUsersManager {
     @Override
     public UserModel getUserByEmail(String email) {
         try {
-
-            var prs = db.getConnection().prepareStatement("SELECT * FROM `users` WHERE email = ?");
+            var prs = db.getConnection().prepareStatement("SELECT u.id,u.first_name,u.last_name,u.email FROM users u WHERE u.email = ?");
             prs.setString(1,email);
             var rs = prs.executeQuery();
-            //exception
+            rs.next();
             return new UserModel(rs.getInt(1), rs.getString(2) , rs.getString(3), rs.getString(4));
         }catch (SQLException ex){
             System.out.println(ex.getMessage());
             return null;
-        }    }
+        }
+    }
 
     @Override
     public ArrayList<UserModel> getUsersByName(String name) throws SQLException {

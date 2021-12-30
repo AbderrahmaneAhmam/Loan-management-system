@@ -3,6 +3,7 @@ package controllers;
 import managers.AppSDK;
 import models.MaterialModel;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
