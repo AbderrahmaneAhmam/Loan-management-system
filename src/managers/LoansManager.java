@@ -73,4 +73,31 @@ class LoansManager extends Manager implements ILoansManager{
         int row = prs.executeUpdate();
         return row != 0;
     }
+
+    public ResultSet LonsCount() throws SQLException {
+        var rs = db.getStatement().executeQuery("select m.name ,count(*) from materials m, loans l where m.id =  l.material_id and MONTH(l.date_loan) = MONTH(Now())\n" +
+                "group by m.name");
+        return rs;
+    }
+    public ResultSet LonsAvailable() throws SQLException {
+        var rs = db.getStatement().executeQuery("select (SELECT count(*)from materials)-(SELECT count(*) from vue) , count(*) from vue");
+        return rs;
+    }
+    public  ArrayList<LoansModel> getCurrentLoans() throws SQLException {
+        var rs = db.getStatement().executeQuery("select l.id,l.date_loan,l.date_back,l.duration,m.id,m.name,m.picture,u.id,u.first_name,u.last_name,u.email from loans l , users u,materials m where u.id=l.user_id and m.id=l.material_id and (l.date_back is null )");
+        return getLoansModels(rs);
+    }
+    public ArrayList<LoansModel> getDelayedLoans() throws SQLException {
+            var rs = db.getStatement().executeQuery("select u.id, u.first_name, u.last_name, u.email, m.id, m.name, m.picture ,l.id,l.duration,l.date_loan,l.date_back  from users u,materials m,loans l where u.id = user_id and m.id = material_id and DATEDIFF( Now(), l.date_loan) > l.duration and  l.date_back is null");
+            var loans = new ArrayList<LoansModel>();
+            while (rs.next()) {
+                loans.add(new LoansModel(rs.getInt(8),
+                        rs.getDate(10),
+                        rs.getDate(11),
+                        rs.getInt(9),
+                        new MaterialModel(rs.getInt(5), rs.getString(6), rs.getString(7)),
+                        new UserModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4))));
+            }
+            return loans;
+    }
 }
