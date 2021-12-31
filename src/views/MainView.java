@@ -5,13 +5,15 @@ import controls.ButtonEditorTable;
 import controls.ButtonRendererTable;
 import controls.CustomDialog;
 import models.MaterialModel;
+import org.jfree.chart.ChartPanel;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class MainView extends JPanel {
     private final MainController controller;
-    private final JPanel globalPanel,topPanel,mainPanel,searchPanel,btnsPanel;
+    private final JPanel globalPanel,topPanel,mainPanel,searchPanel,btnsPanel,graphPanel,graph1,graph2;
     private final JTable table;
     private final JScrollPane scroller;
     private final JButton tableBtn,btnSearch,btnAddUser;
@@ -22,6 +24,9 @@ public class MainView extends JPanel {
         tableBtn = new JButton("Loan");
         scroller = new javax.swing.JScrollPane(table);
         globalPanel = new JPanel();
+        graphPanel = new JPanel();
+        graph1 = new JPanel(new GridLayout());
+        graph2 = new JPanel(new GridLayout());
         topPanel = new JPanel();
         mainPanel = new JPanel();
         btnSearch = new JButton("Search");
@@ -35,6 +40,7 @@ public class MainView extends JPanel {
         globalPanel.setLayout(new BorderLayout());
         topPanel.setLayout(new GridLayout(1,2));
         mainPanel.setLayout(new GridLayout(2,1));
+        graphPanel.setLayout(new GridLayout(1,2));
         table.setAutoCreateRowSorter(true);
         this.setLayout(new GridLayout(1,1));
         table.setModel(controller.getAccountsTableModel());
@@ -45,11 +51,16 @@ public class MainView extends JPanel {
 
         searchPanel.add(txtSearch);
         searchPanel.add(btnSearch);
-
+        ChartPanel p = controller.Graph1();
+        graph1.add(p);
+        ChartPanel p2 = controller.Graph2();
+        graph2.add(p2);
+        graphPanel.add(graph1);
+        graphPanel.add(graph2);
         topPanel.add(btnsPanel);
         topPanel.add(searchPanel);
         mainPanel.add(scroller);
-        mainPanel.add(new JPanel());
+        mainPanel.add(graphPanel);
         globalPanel.add(topPanel,BorderLayout.PAGE_START);
         globalPanel.add(mainPanel,BorderLayout.CENTER);
 

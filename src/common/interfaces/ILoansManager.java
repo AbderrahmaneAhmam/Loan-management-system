@@ -3,6 +3,7 @@ package common.interfaces;
 import models.LoansModel;
 import models.UserModel;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -13,4 +14,7 @@ public interface ILoansManager {
     boolean deleteLoan(LoansModel loan) throws SQLException;
     boolean deleteLoan(int id) throws SQLException;
     boolean updateLoan(LoansModel loan) throws SQLException;
+     ResultSet LonsCount() throws SQLException;
+     ResultSet LonsAvailable() throws SQLException ;
+     ArrayList<LoansModel> getDelayedLoans() throws SQLException;
 }
