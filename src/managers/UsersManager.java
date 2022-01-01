@@ -6,7 +6,7 @@ import models.UserModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-class UsersManager extends Manager implements IUsersManager {
+class UsersManager extends Manager<UserModel> implements IUsersManager {
 
     public UsersManager(DBManager db) {
         super(db);
@@ -34,7 +34,7 @@ class UsersManager extends Manager implements IUsersManager {
                 prs.setString(3, user.getEmail());
 
                 int row = prs.executeUpdate();
-
+                events.forEach(e->e.onRowAdd(user));
                 if (row == 0){
                     return false;
             }
@@ -56,7 +56,7 @@ class UsersManager extends Manager implements IUsersManager {
             prs.setString(3, user.getEmail());
             prs.setInt(4, user.getId());
             int row = prs.executeUpdate();
-
+            events.forEach(e->e.onRowAdd(user));
 
             return true;
         }catch (SQLException ex){
@@ -72,7 +72,7 @@ class UsersManager extends Manager implements IUsersManager {
             var prs = db.getConnection().prepareStatement("delete from users where id = ?");
             prs.setInt(1,user.getId());
             int row = prs.executeUpdate();
-
+            events.forEach(e->e.onRowAdd(user));
            if (row != 1){
                return false;
            }
@@ -89,7 +89,7 @@ class UsersManager extends Manager implements IUsersManager {
         var prs = db.getConnection().prepareStatement("delete from users where id = ?");
         prs.setInt(1,id);
         int row = prs.executeUpdate();
-
+        events.forEach(e->e.onRowAdd(new UserModel(id,"","","")));
         if (row != 1){
             return false;
         }
@@ -117,8 +117,10 @@ class UsersManager extends Manager implements IUsersManager {
     @Override
     public ArrayList<UserModel> getUsersByName(String name) throws SQLException {
         try {
-            var prs = db.getConnection().prepareStatement("select * from users where first_name like ? ");
+            var prs = db.getConnection().prepareStatement("select * from users where first_name like ? or last_name like ? or email like ?");
             prs.setString(1,"%"+name+"%");
+            prs.setString(2,"%"+name+"%");
+            prs.setString(3,"%"+name+"%");
             var rs = prs.executeQuery();
             var Ausers = new ArrayList<UserModel>();
             while(rs.next()){

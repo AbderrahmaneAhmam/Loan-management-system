@@ -3,17 +3,17 @@ package views;
 import controllers.MainController;
 import controls.ButtonEditorTable;
 import controls.ButtonRendererTable;
+import controls.CustomChartPanel;
 import controls.CustomDialog;
+import managers.AppSDK;
 import models.MaterialModel;
-import org.jfree.chart.ChartPanel;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class MainView extends JPanel {
     private final MainController controller;
-    private final JPanel globalPanel,topPanel,mainPanel,searchPanel,btnsPanel,graphPanel,graph1,graph2;
+    private final JPanel globalPanel,topPanel,mainPanel,searchPanel,btnsPanel,graphPanel;
     private final JTable table;
     private final JScrollPane scroller;
     private final JButton tableBtn,btnSearch,btnAddUser;
@@ -25,8 +25,6 @@ public class MainView extends JPanel {
         scroller = new javax.swing.JScrollPane(table);
         globalPanel = new JPanel();
         graphPanel = new JPanel();
-        graph1 = new JPanel(new GridLayout());
-        graph2 = new JPanel(new GridLayout());
         topPanel = new JPanel();
         mainPanel = new JPanel();
         btnSearch = new JButton("Search");
@@ -46,17 +44,11 @@ public class MainView extends JPanel {
         table.setModel(controller.getAccountsTableModel());
         table.getColumn("").setCellRenderer(new ButtonRendererTable("Loan"));
         table.getColumn("").setCellEditor(new ButtonEditorTable(new JCheckBox(),tableBtn));
-
         btnsPanel.add(btnAddUser);
-
         searchPanel.add(txtSearch);
         searchPanel.add(btnSearch);
-        ChartPanel p = controller.Graph1();
-        graph1.add(p);
-        ChartPanel p2 = controller.Graph2();
-        graph2.add(p2);
-        graphPanel.add(graph1);
-        graphPanel.add(graph2);
+        graphPanel.add(new CustomChartPanel(controller.Graph1(),true));
+        graphPanel.add(new CustomChartPanel(controller.Graph2(),true));
         topPanel.add(btnsPanel);
         topPanel.add(searchPanel);
         mainPanel.add(scroller);
@@ -68,11 +60,21 @@ public class MainView extends JPanel {
             var row = ((DefaultTableModel)table.getModel()).getDataVector().elementAt(table.getSelectedRow());
             var material = new MaterialModel((int)row.get(0),row.get(1).toString(),"");
             var view = new AddLoanView(material);
-            view.addEventListener(()->{
-                SwingUtilities.updateComponentTreeUI(this);
-                controller.refreshTable(txtSearch.getText());
-            });
             var d = new CustomDialog((JFrame) SwingUtilities.getWindowAncestor(this),"Add loan",view,500,200);
+        });
+        AppSDK.LoansManager.addChangesListener(b->{
+            SwingUtilities.updateComponentTreeUI(this);
+            controller.refreshTable(txtSearch.getText());
+            graphPanel.removeAll();
+            graphPanel.add(new CustomChartPanel(controller.Graph1(),true));
+            graphPanel.add(new CustomChartPanel(controller.Graph2(),true));
+        });
+        AppSDK.MaterialsManager.addChangesListener(b->{
+            SwingUtilities.updateComponentTreeUI(this);
+            controller.refreshTable(txtSearch.getText());
+            graphPanel.removeAll();
+            graphPanel.add(new CustomChartPanel(controller.Graph1(),true));
+            graphPanel.add(new CustomChartPanel(controller.Graph2(),true));
         });
         btnSearch.addActionListener(e-> controller.refreshTable(txtSearch.getText()));
         btnAddUser.addActionListener(e->{

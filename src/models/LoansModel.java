@@ -2,6 +2,7 @@ package models;
 
 
 import java.sql.Date;
+import java.util.Calendar;
 
 public class LoansModel {
     private int id;
@@ -10,6 +11,10 @@ public class LoansModel {
     private int duration;
     private MaterialModel material;
     private UserModel user;
+
+    public LoansModel(int id) {
+        this.id = id;
+    }
 
     public LoansModel(int id, Date loanDate, Date backDate, int duration, MaterialModel material, UserModel user) {
         this.id = id;
@@ -66,5 +71,12 @@ public class LoansModel {
 
     public void setUser(UserModel user) {
         this.user = user;
+    }
+    public int getDelay(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(loanDate);
+        c.add(Calendar.DATE, duration);
+        var diff = Calendar.getInstance().getTimeInMillis()-c.getTimeInMillis();
+        return Math.max((int)(diff/(60*60*24*1000)), 0);
     }
 }

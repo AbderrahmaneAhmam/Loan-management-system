@@ -3,13 +3,13 @@ package controllers;
 import managers.AppSDK;
 import models.MaterialModel;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -48,27 +48,40 @@ public class MainController {
         accountsTableModel.fireTableDataChanged();
     }
 
-    public final ChartPanel Graph1() {
-
+    public final JFreeChart Graph1() {
         DefaultCategoryDataset data = new DefaultCategoryDataset();
         try {
             ResultSet rs = AppSDK.LoansManager.LonsCount();
             while(rs.next()){
-                data.setValue(new Double(rs.getString(2)),"value",rs.getString(1));
+                data.setValue(new Double(rs.getString(2)),"Count loans",rs.getString(1));
             }
-            JFreeChart chart = ChartFactory.createBarChart("Loans In Month",
-                    " ", " " , data);
-            ChartPanel panel = new ChartPanel(chart,true);
-            chart.setBackgroundPaint(new Color(127, 127, 127, 64));
-            panel.setVisible(true);
-            return panel;
+            var chart = ChartFactory.createBarChart("Loans In Month",
+                    " ", " " , data, PlotOrientation.VERTICAL,true,true,false);
+            chart.setBackgroundPaint(UIManager.getColor ("Panel.background"));
+            chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
+            chart.getTitle().setPaint(UIManager.getColor ("Label.foreground"));
+            chart.getPlot().setOutlinePaint(UIManager.getColor ("Panel.background"));
+            var plot = (CategoryPlot)chart.getPlot();
+            var range = plot.getRangeAxis();
+            var domain = plot.getDomainAxis();
+            domain.setTickLabelPaint(UIManager.getColor ("Label.foreground"));
+            range.setTickLabelPaint(UIManager.getColor ("Label.foreground"));
+            UIManager.addPropertyChangeListener(e->{
+                chart.setBackgroundPaint(UIManager.getColor ("Panel.background"));
+                chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
+                chart.getTitle().setPaint(UIManager.getColor ("Label.foreground"));
+                chart.getPlot().setOutlinePaint(UIManager.getColor ("Panel.background"));
+                domain.setTickLabelPaint(UIManager.getColor ("Label.foreground"));
+                range.setTickLabelPaint(UIManager.getColor ("Label.foreground"));
+            });
+            return chart;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
 
     }
-    public final ChartPanel Graph2() {
+    public final JFreeChart Graph2() {
 
         DefaultPieDataset Pie = new DefaultPieDataset();
         try {
@@ -76,16 +89,22 @@ public class MainController {
             rs.next();
             Pie.setValue("Materials Not Available", rs.getInt(2));
             Pie.setValue("Materials Available", rs.getInt(1));
-            JFreeChart chart = ChartFactory.createPieChart("Materials available", Pie,
+            var chart = ChartFactory.createPieChart("Materials available", Pie,
                     true, true , true);
-            ChartPanel panel = new ChartPanel(chart,true);
-            chart.setBackgroundPaint(new Color(127, 127, 127, 64));
-            panel.setVisible(true);
-            return panel;
+            chart.setBackgroundPaint(UIManager.getColor ("Panel.background"));
+            chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
+            chart.getTitle().setPaint(UIManager.getColor ("Label.foreground"));
+            chart.getPlot().setOutlinePaint(UIManager.getColor ("Panel.background"));
+            UIManager.addPropertyChangeListener(e->{
+                chart.setBackgroundPaint(UIManager.getColor ("Panel.background"));
+                chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
+                chart.getTitle().setPaint(UIManager.getColor ("Label.foreground"));
+                chart.getPlot().setOutlinePaint(UIManager.getColor ("Panel.background"));
+            });
+            return chart;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
-
     }
-    }
+}

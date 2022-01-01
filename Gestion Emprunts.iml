@@ -12,5 +12,7 @@
     <orderEntry type="library" name="flatlaf-2.0-rc1" level="project" />
     <orderEntry type="library" name="mysql-connector-java-8.0.27" level="project" />
     <orderEntry type="library" name="hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" name="hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" name="orsoncharts-1.4-eval-nofx" level="project" />
   </component>
 </module>
