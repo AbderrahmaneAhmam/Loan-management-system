@@ -1,14 +1,11 @@
 package views;
 
-import common.interfaces.ChangedNotification;
 import controllers.AddLoanController;
 import models.MaterialModel;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class AddLoanView extends JPanel {
-    private final ArrayList<ChangedNotification> events;
     private final JTextField txtDur;
     private final JTextField txtEmail;
     private final JLabel labdur,labemail;
@@ -17,7 +14,6 @@ public class AddLoanView extends JPanel {
     private final AddLoanController controller;
 
     public AddLoanView(MaterialModel material) {
-        events = new ArrayList<>();
         txtDur = new JTextField(20);
         txtEmail = new JTextField(20);
         labdur = new JLabel("Duration");
@@ -30,7 +26,7 @@ public class AddLoanView extends JPanel {
         p3 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         globalPanel = new JPanel();
         insidePanel = new JPanel();
-        controller = new AddLoanController(material,this,events);
+        controller = new AddLoanController(material,this);
         initComponents();
     }
     private void initComponents(){
@@ -50,8 +46,5 @@ public class AddLoanView extends JPanel {
         globalPanel.add(insidePanel);
         this.add(globalPanel);
         btnAdd.addActionListener(e-> controller.addAction(globalPanel,txtDur.getText(),txtEmail.getText()));
-    }
-    public void addEventListener(ChangedNotification change){
-        events.add(change);
     }
 }

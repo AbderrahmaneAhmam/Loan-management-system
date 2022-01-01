@@ -12,6 +12,10 @@ public class LoansModel {
     private MaterialModel material;
     private UserModel user;
 
+    public LoansModel(int id) {
+        this.id = id;
+    }
+
     public LoansModel(int id, Date loanDate, Date backDate, int duration, MaterialModel material, UserModel user) {
         this.id = id;
         this.loanDate = loanDate;
@@ -69,11 +73,10 @@ public class LoansModel {
         this.user = user;
     }
     public int getDelay(){
-        java.sql.Date logicalDate;
         Calendar c = Calendar.getInstance();
         c.setTime(loanDate);
         c.add(Calendar.DATE, duration);
         var diff = Calendar.getInstance().getTimeInMillis()-c.getTimeInMillis();
-        return  (int)(diff/(60*60*24*1000));
+        return Math.max((int)(diff/(60*60*24*1000)), 0);
     }
 }

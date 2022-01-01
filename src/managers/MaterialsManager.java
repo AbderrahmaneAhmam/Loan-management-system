@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-class MaterialsManager extends Manager implements IMaterialsManager {
+class MaterialsManager extends Manager<MaterialModel> implements IMaterialsManager {
 
     public MaterialsManager(DBManager db) {
         super(db);
@@ -65,6 +65,7 @@ class MaterialsManager extends Manager implements IMaterialsManager {
         prs.setString(1, material.getName());
         prs.setString(2, material.getPicture());
         int row = prs.executeUpdate();
+        events.forEach(e->e.onRowAdd(material));
         return row != 0;
     }
 
@@ -76,6 +77,7 @@ class MaterialsManager extends Manager implements IMaterialsManager {
             prs.setString(2, material.getPicture());
             prs.setInt(3, material.getId());
             int row = prs.executeUpdate();
+            events.forEach(e->e.onRowAdd(material));
             return row != 0;
         }catch (SQLException ex){
             System.out.println(ex.getMessage());
@@ -88,6 +90,7 @@ class MaterialsManager extends Manager implements IMaterialsManager {
         var prs = db.getConnection().prepareStatement("delete from materials where id=?");
         prs.setInt(1, material.getId());
         int row = prs.executeUpdate();
+        events.forEach(e->e.onRowAdd(material));
         return row != 0;
     }
 }

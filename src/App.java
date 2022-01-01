@@ -1,7 +1,11 @@
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatPropertiesLaf;
 import views.Layout;
 
 import javax.swing.*;
+import java.awt.geom.FlatteningPathIterator;
 import java.io.IOException;
 
 public class App {

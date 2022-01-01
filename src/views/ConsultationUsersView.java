@@ -4,7 +4,9 @@ import controllers.ConsultationUsersController;
 import controllers.MainController;
 import controls.ButtonEditorTable;
 import controls.ButtonRendererTable;
+import controls.CustomChartPanel;
 import controls.CustomDialog;
+import managers.AppSDK;
 import models.MaterialModel;
 import models.UserModel;
 
@@ -24,7 +26,7 @@ public class ConsultationUsersView extends JPanel {
         controller = new ConsultationUsersController();
         table = new JTable();
         tableDelays = new JTable();
-        tableBtn = new JButton("Histo");
+        tableBtn = new JButton("Log");
         scroller = new javax.swing.JScrollPane(table);
         scrollDelays = new javax.swing.JScrollPane(tableDelays);
         globalPanel = new JPanel();
@@ -32,7 +34,7 @@ public class ConsultationUsersView extends JPanel {
         searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         mainPanel = new JPanel();
         topPanelDelays = new JPanel(new GridLayout());
-        labTitle = new JLabel("Delayed loans");
+        labTitle = new JLabel("Overdue loans");
         bottomPanel = new JPanel(new BorderLayout());
         btnSearch = new JButton("Search");
         btnSearchDelays = new JButton("Search");
@@ -48,7 +50,7 @@ public class ConsultationUsersView extends JPanel {
         tableDelays.setModel(controller.getDelaysTableModel());
         table.setAutoCreateRowSorter(true);
         tableDelays.setAutoCreateRowSorter(true);
-        table.getColumn("").setCellRenderer(new ButtonRendererTable("Histo"));
+        table.getColumn("").setCellRenderer(new ButtonRendererTable("Log"));
         table.getColumn("").setCellEditor(new ButtonEditorTable(new JCheckBox(),tableBtn));
         topPanel.add(txtSearch);
         topPanel.add(btnSearch);
@@ -68,9 +70,16 @@ public class ConsultationUsersView extends JPanel {
         tableBtn.addActionListener((e)->{
             var row = ((DefaultTableModel)table.getModel()).getDataVector().elementAt(table.getSelectedRow());
             var user = new UserModel((int)row.get(0),row.get(1).toString(),row.get(2).toString(),row.get(3).toString());
-            new CustomDialog((JFrame) SwingUtilities.getWindowAncestor(this),"Add loan",new HistoUserView(user),500,500);
+            new CustomDialog((JFrame) SwingUtilities.getWindowAncestor(this),"Log loans",new HistoUserView(user),500,500);
+        });
+        AppSDK.UsersManager.addChangesListener(b->{
+            controller.refreshTableUsers(txtSearch.getText());
+        });
+        AppSDK.LoansManager.addChangesListener(b->{
+            controller.refreshTableLoans(txtSearch.getText());
         });
         btnSearch.addActionListener(e-> controller.refreshTableUsers(txtSearch.getText()));
+        btnSearchDelays.addActionListener(e-> controller.refreshTableLoans(txtSearchDelays.getText()));
         this.add(globalPanel);
     }
 }

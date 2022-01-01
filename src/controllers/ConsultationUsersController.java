@@ -62,7 +62,7 @@ public class ConsultationUsersController {
         loansTableModel.getDataVector().clear();
         ArrayList<LoansModel> loans = new ArrayList<>();
         try {
-            loans = AppSDK.LoansManager.getLoans();
+            loans = AppSDK.LoansManager.getDelayedLoans(name);
         } catch (SQLException e) {
             e.printStackTrace();
         }

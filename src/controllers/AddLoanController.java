@@ -1,32 +1,25 @@
 package controllers;
 
-import common.interfaces.ChangedNotification;
 import managers.AppSDK;
 import models.LoansModel;
 import models.MaterialModel;
 import models.UserModel;
 import views.AddUserView;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.atomic.AtomicReference;
-
 import static common.validation.RegexValidation.emailValidation;
 import static java.lang.Integer.parseInt;
 
 public class AddLoanController {
     private final MaterialModel material;
     private final Component component;
-    private final ArrayList<ChangedNotification> events;
 
-    public AddLoanController(MaterialModel material, Component c, ArrayList<ChangedNotification> events) {
+    public AddLoanController(MaterialModel material, Component c) {
         this.material = material;
-        this.events = events;
         component =c;
     }
     public void addAction(JPanel c, String duration, String email) {
@@ -36,19 +29,17 @@ public class AddLoanController {
             JOptionPane.showMessageDialog(c,"Invalid input!!","Warning",JOptionPane.WARNING_MESSAGE);
             return;
         }
-        AtomicReference<UserModel> user = new AtomicReference<>(AppSDK.UsersManager.getUserByEmail(email));
-        if(user.get() ==null){
+        UserModel user = AppSDK.UsersManager.getUserByEmail(email);
+        if(user == null){
             int dialogResult = JOptionPane.showConfirmDialog (null, "User doesn't exists\nWould You Like to add this user?","Warning",JOptionPane.YES_NO_OPTION);
             if(dialogResult == JOptionPane.YES_OPTION){
                 c.removeAll();
                 c.revalidate();
                 c.repaint();
-                var view = new AddUserView();
-                view.addEventListener(e->{
-                    user.set(e);
-                    addLonAndEvents(c, duration, user);
+                AppSDK.UsersManager.addChangesListener(e->{
+                    addLonAndEvents(c, duration, AppSDK.UsersManager.getUserByEmail(e.getEmail()));
                 });
-                c.add(view);
+                c.add(new AddUserView());
             }
             else{
                 closeWindow();
@@ -59,12 +50,11 @@ public class AddLoanController {
         }
     }
 
-    private void addLonAndEvents(JPanel c, String duration, AtomicReference<UserModel> user) {
+    private void addLonAndEvents(JPanel c, String duration, UserModel user) {
         try {
-            AppSDK.LoansManager.addLoan(new LoansModel(0,new Date(Calendar.getInstance().getTimeInMillis()),null,parseInt(duration),material,user.get()));
+            AppSDK.LoansManager.addLoan(new LoansModel(0,new Date(Calendar.getInstance().getTimeInMillis()),null,parseInt(duration),material,user));
             JOptionPane.showMessageDialog(c,"success","success",JOptionPane.INFORMATION_MESSAGE);
             closeWindow();
-            events.forEach(ChangedNotification::onTableChange);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(c,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }

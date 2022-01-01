@@ -4,11 +4,13 @@ import common.interfaces.ILoansManager;
 import models.LoansModel;
 import models.MaterialModel;
 import models.UserModel;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
-class LoansManager extends Manager implements ILoansManager{
+class LoansManager extends Manager<LoansModel> implements ILoansManager{
 
     public LoansManager(DBManager db) {
         super(db);
@@ -46,6 +48,7 @@ class LoansManager extends Manager implements ILoansManager{
         prs.setInt(3, loan.getDuration());
         prs.setDate(4, loan.getLoanDate());
         int row = prs.executeUpdate();
+        events.forEach(e->e.onRowAdd(loan));
         return row != 0;
     }
 
@@ -54,6 +57,7 @@ class LoansManager extends Manager implements ILoansManager{
         var prs = db.getConnection().prepareStatement("delete from loans where id=?");
         prs.setInt(1,loan.getId());
         int row = prs.executeUpdate();
+        events.forEach(e->e.onRowAdd(loan));
         return row != 0;
     }
 
@@ -62,42 +66,59 @@ class LoansManager extends Manager implements ILoansManager{
         var prs = db.getConnection().prepareStatement("delete from loans where id=?");
         prs.setInt(1,id);
         int row = prs.executeUpdate();
+        events.forEach(e->e.onRowAdd(new LoansModel(id)));
         return row != 0;
     }
 
     @Override
     public boolean updateLoan(LoansModel loan) throws SQLException {
         var prs = db.getConnection().prepareStatement("update loans set date_back=? where id=?");
-        prs.setInt(1,loan.getId());
-        prs.setDate(2, loan.getBackDate());
+        prs.setDate(1, new Date(Calendar.getInstance().getTimeInMillis()));
+        prs.setInt(2,loan.getId());
         int row = prs.executeUpdate();
+        events.forEach(e->e.onRowAdd(loan));
         return row != 0;
     }
 
+
     public ResultSet LonsCount() throws SQLException {
-        var rs = db.getStatement().executeQuery("select m.name ,count(*) from materials m, loans l where m.id =  l.material_id and MONTH(l.date_loan) = MONTH(Now())\n" +
-                "group by m.name");
+        var rs = db.getStatement().executeQuery("select MONTHNAME(date_loan) As 'Month',count(*) As 'Number of Loans' from materials m, loans l where m.id =  l.material_id \n" +
+                "and ( MONTH(date_loan) = MONTH(Now())\n" +
+                "OR (YEAR(date_loan) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH) AND MONTH(date_loan) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH))\n" +
+                "OR (YEAR(date_loan) = YEAR(CURRENT_DATE - INTERVAL 2 MONTH) AND MONTH(date_loan) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH))\n" +
+                "OR (YEAR(date_loan) = YEAR(CURRENT_DATE - INTERVAL 3 MONTH) AND MONTH(date_loan) = MONTH(CURRENT_DATE - INTERVAL 3 MONTH)))\n" +
+                "group by MONTHNAME(date_loan) Order by date_loan");
         return rs;
     }
     public ResultSet LonsAvailable() throws SQLException {
         var rs = db.getStatement().executeQuery("select (SELECT count(*)from materials)-(SELECT count(*) from vue) , count(*) from vue");
         return rs;
     }
-    public  ArrayList<LoansModel> getCurrentLoans() throws SQLException {
-        var rs = db.getStatement().executeQuery("select l.id,l.date_loan,l.date_back,l.duration,m.id,m.name,m.picture,u.id,u.first_name,u.last_name,u.email from loans l , users u,materials m where u.id=l.user_id and m.id=l.material_id and (l.date_back is null )");
+    public  ArrayList<LoansModel> getCurrentLoans(String name) throws SQLException {
+        var ps = db.getConnection().prepareStatement("select l.id,l.date_loan,l.date_back,l.duration,m.id,m.name,m.picture,u.id,u.first_name,u.last_name,u.email from loans l , users u,materials m where u.id=l.user_id and m.id=l.material_id and (l.date_back is null ) and (m.name like ? or u.first_name like ? or u.last_name like ? or u.email like ?)");
+        ps.setString(1,"%"+name+"%");
+        ps.setString(2,"%"+name+"%");
+        ps.setString(3,"%"+name+"%");
+        ps.setString(4,"%"+name+"%");
+        var rs = ps.executeQuery();
         return getLoansModels(rs);
     }
-    public ArrayList<LoansModel> getDelayedLoans() throws SQLException {
-            var rs = db.getStatement().executeQuery("select u.id, u.first_name, u.last_name, u.email, m.id, m.name, m.picture ,l.id,l.duration,l.date_loan,l.date_back  from users u,materials m,loans l where u.id = user_id and m.id = material_id and DATEDIFF( Now(), l.date_loan) > l.duration and  l.date_back is null");
-            var loans = new ArrayList<LoansModel>();
-            while (rs.next()) {
-                loans.add(new LoansModel(rs.getInt(8),
-                        rs.getDate(10),
-                        rs.getDate(11),
-                        rs.getInt(9),
-                        new MaterialModel(rs.getInt(5), rs.getString(6), rs.getString(7)),
-                        new UserModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4))));
-            }
-            return loans;
+    public ArrayList<LoansModel> getDelayedLoans(String name) throws SQLException {
+        var ps = db.getConnection().prepareStatement("select u.id, u.first_name, u.last_name, u.email, m.id, m.name, m.picture ,l.id,l.duration,l.date_loan,l.date_back  from users u,materials m,loans l where u.id = user_id and m.id = material_id and DATEDIFF( Now(), l.date_loan) > l.duration and  l.date_back is null and (m.name like ? or u.first_name like ? or u.last_name like ? or u.email like ?)");
+        ps.setString(1,"%"+name+"%");
+        ps.setString(2,"%"+name+"%");
+        ps.setString(3,"%"+name+"%");
+        ps.setString(4,"%"+name+"%");
+        var rs = ps.executeQuery();
+        var loans = new ArrayList<LoansModel>();
+        while (rs.next()) {
+            loans.add(new LoansModel(rs.getInt(8),
+                    rs.getDate(10),
+                    rs.getDate(11),
+                    rs.getInt(9),
+                    new MaterialModel(rs.getInt(5), rs.getString(6), rs.getString(7)),
+                    new UserModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4))));
+        }
+        return loans;
     }
 }

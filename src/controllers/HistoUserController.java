@@ -27,7 +27,7 @@ public class HistoUserController {
         histoTableModel.addColumn("Name");
         histoTableModel.addColumn("Date loan");
         histoTableModel.addColumn("Duration");
-        histoTableModel.addColumn("Date back");
+        histoTableModel.addColumn("Date return");
         histoTableModel.getDataVector().clear();
         ArrayList<LoansModel> loans = new ArrayList<>();
         try {
