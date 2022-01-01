@@ -35,7 +35,7 @@ public class BackLoanView extends JPanel {
         table.setAutoCreateRowSorter(true);
         this.setLayout(new GridLayout(1,1));
         table.setModel(controller.getTableModel());
-        table.getColumn("").setCellRenderer(new ButtonRendererTable("Back"));
+        table.getColumn("").setCellRenderer(new ButtonRendererTable("Return"));
         table.getColumn("").setCellEditor(new ButtonEditorTable(new JCheckBox(),tableBtn));
         topPanel.add(txtSearch);
         topPanel.add(btnSearch);
