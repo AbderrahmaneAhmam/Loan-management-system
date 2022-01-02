@@ -4,6 +4,7 @@ import managers.AppSDK;
 import models.MaterialModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -61,6 +62,9 @@ public class MainController {
             chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
             chart.getTitle().setPaint(UIManager.getColor ("Label.foreground"));
             chart.getPlot().setOutlinePaint(UIManager.getColor ("Panel.background"));
+            chart.getLegend().setBackgroundPaint(UIManager.getColor ("Panel.background"));
+            chart.getLegend().setFrame(new BlockBorder(UIManager.getColor ("Label.foreground")));
+            chart.getLegend().setItemPaint(UIManager.getColor ("Label.foreground"));
             var plot = (CategoryPlot)chart.getPlot();
             var range = plot.getRangeAxis();
             var domain = plot.getDomainAxis();
@@ -73,6 +77,9 @@ public class MainController {
                 chart.getPlot().setOutlinePaint(UIManager.getColor ("Panel.background"));
                 domain.setTickLabelPaint(UIManager.getColor ("Label.foreground"));
                 range.setTickLabelPaint(UIManager.getColor ("Label.foreground"));
+                chart.getLegend().setBackgroundPaint(UIManager.getColor ("Panel.background"));
+                chart.getLegend().setFrame(new BlockBorder(UIManager.getColor ("Label.foreground")));
+                chart.getLegend().setItemPaint(UIManager.getColor ("Label.foreground"));
             });
             return chart;
         } catch (SQLException e) {
@@ -95,11 +102,17 @@ public class MainController {
             chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
             chart.getTitle().setPaint(UIManager.getColor ("Label.foreground"));
             chart.getPlot().setOutlinePaint(UIManager.getColor ("Panel.background"));
+            chart.getLegend().setBackgroundPaint(UIManager.getColor ("Panel.background"));
+            chart.getLegend().setFrame(new BlockBorder(UIManager.getColor ("Label.foreground")));
+            chart.getLegend().setItemPaint(UIManager.getColor ("Label.foreground"));
             UIManager.addPropertyChangeListener(e->{
                 chart.setBackgroundPaint(UIManager.getColor ("Panel.background"));
                 chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
                 chart.getTitle().setPaint(UIManager.getColor ("Label.foreground"));
                 chart.getPlot().setOutlinePaint(UIManager.getColor ("Panel.background"));
+                chart.getLegend().setBackgroundPaint(UIManager.getColor ("Panel.background"));
+                chart.getLegend().setFrame(new BlockBorder(UIManager.getColor ("Label.foreground")));
+                chart.getLegend().setItemPaint(UIManager.getColor ("Label.foreground"));
             });
             return chart;
         } catch (SQLException e) {

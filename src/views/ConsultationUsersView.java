@@ -73,13 +73,15 @@ public class ConsultationUsersView extends JPanel {
             new CustomDialog((JFrame) SwingUtilities.getWindowAncestor(this),"Log loans",new HistoUserView(user),500,500);
         });
         AppSDK.UsersManager.addChangesListener(b->{
+            SwingUtilities.updateComponentTreeUI(this);
             controller.refreshTableUsers(txtSearch.getText());
         });
         AppSDK.LoansManager.addChangesListener(b->{
+            SwingUtilities.updateComponentTreeUI(this);
             controller.refreshTableLoans(txtSearch.getText());
         });
-        btnSearch.addActionListener(e-> controller.refreshTableUsers(txtSearch.getText()));
-        btnSearchDelays.addActionListener(e-> controller.refreshTableLoans(txtSearchDelays.getText()));
+        btnSearch.addActionListener(e-> {SwingUtilities.updateComponentTreeUI(this);controller.refreshTableUsers(txtSearch.getText());});
+        btnSearchDelays.addActionListener(e-> {SwingUtilities.updateComponentTreeUI(this);controller.refreshTableLoans(txtSearchDelays.getText());});
         this.add(globalPanel);
     }
 }

@@ -49,9 +49,10 @@ public class BackLoanView extends JPanel {
             controller.returnLoan(loan);
         });
         AppSDK.LoansManager.addChangesListener(b->{
+            SwingUtilities.updateComponentTreeUI(this);
             controller.refreshTable(txtSearch.getText());
         });
-        btnSearch.addActionListener(e-> controller.refreshTable(txtSearch.getText()));
+        btnSearch.addActionListener(e-> {SwingUtilities.updateComponentTreeUI(this);controller.refreshTable(txtSearch.getText());});
         this.add(globalPanel);
     }
 }
