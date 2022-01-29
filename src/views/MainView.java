@@ -21,7 +21,7 @@ public class MainView extends JPanel {
     public MainView(){
         controller = new MainController();
         table = new JTable();
-        tableBtn = new JButton("Loan");
+        tableBtn = new JButton("Lending");
         scroller = new javax.swing.JScrollPane(table);
         globalPanel = new JPanel();
         graphPanel = new JPanel();
@@ -42,7 +42,7 @@ public class MainView extends JPanel {
         table.setAutoCreateRowSorter(true);
         this.setLayout(new GridLayout(1,1));
         table.setModel(controller.getAccountsTableModel());
-        table.getColumn("").setCellRenderer(new ButtonRendererTable("Loan"));
+        table.getColumn("").setCellRenderer(new ButtonRendererTable("Lending"));
         table.getColumn("").setCellEditor(new ButtonEditorTable(new JCheckBox(),tableBtn));
         btnsPanel.add(btnAddUser);
         searchPanel.add(txtSearch);

@@ -44,8 +44,8 @@ public class Layout extends JFrame {
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab( "Main", new MainView());
-        tabs.addTab( "User consultation", new ConsultationUsersView());
-        tabs.addTab( "Loans return", new BackLoanView());
+        tabs.addTab( "Consultation", new ConsultationUsersView());
+        tabs.addTab( "Return", new BackLoanView());
         this.add(tabs);
         this.setVisible(true);
     }

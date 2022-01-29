@@ -54,9 +54,9 @@ public class MainController {
         try {
             ResultSet rs = AppSDK.LoansManager.LonsCount();
             while(rs.next()){
-                data.setValue(new Double(rs.getString(2)),"Count loans",rs.getString(1));
+                data.setValue(new Double(rs.getString(2)),"Count",rs.getString(1));
             }
-            var chart = ChartFactory.createBarChart("Loans In Month",
+            var chart = ChartFactory.createBarChart("Loans in the last 4 months",
                     " ", " " , data, PlotOrientation.VERTICAL,true,true,false);
             chart.setBackgroundPaint(UIManager.getColor ("Panel.background"));
             chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
@@ -94,9 +94,9 @@ public class MainController {
         try {
             ResultSet rs = AppSDK.LoansManager.LonsAvailable();
             rs.next();
-            Pie.setValue("Materials Not Available", rs.getInt(2));
-            Pie.setValue("Materials Available", rs.getInt(1));
-            var chart = ChartFactory.createPieChart("Materials available", Pie,
+            Pie.setValue("Not Available Materials", rs.getInt(2));
+            Pie.setValue("Available Materials", rs.getInt(1));
+            var chart = ChartFactory.createPieChart("Available materials", Pie,
                     true, true , true);
             chart.setBackgroundPaint(UIManager.getColor ("Panel.background"));
             chart.getPlot().setBackgroundPaint( UIManager.getColor ("Panel.background"));
