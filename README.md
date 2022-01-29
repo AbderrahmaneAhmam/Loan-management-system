@@ -63,7 +63,7 @@ Make sure you have [JDK](https://www.oracle.com/java/technologies/downloads/) in
 
 ## Code Contributors
 
-This project exists thanks to all the people who contribute.
+This project exists thanks to all the people who contribute.[[Contribute](CONTRIBUTING.md)].</br>
 <a href="https://github.com/AbderrahmaneAhmam/loans-manager/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=AbderrahmaneAhmam/Loans-manager" />
 </a>
