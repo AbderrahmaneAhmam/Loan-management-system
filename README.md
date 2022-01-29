@@ -64,7 +64,7 @@ Make sure you have [JDK](https://www.oracle.com/java/technologies/downloads/) in
 ## Code Contributors
 
 This project exists thanks to all the people who contribute.
-<a href="https://github.com/AbderrahmaneAhmam/Website-Static-for-Cloud-Company/graphs/contributors">
+<a href="https://github.com/AbderrahmaneAhmam/loans-manager/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=AbderrahmaneAhmam/Website-Static-for-Cloud-Company" />
 </a>
 
