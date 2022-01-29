@@ -20,8 +20,6 @@
 - Get informations about delayed materials and daly
 - Track materials
 
-[[_TOC_]]
-
 ## ✨ Demo
 
 `Loans Manager` is able to show you how to use MVC and Observable pattern in real project with t implementation of JFreeChart and Flatlaf:
@@ -30,7 +28,7 @@
   <img width="700" align="center" src="./images/demo.gif" alt="demo"/>
 </p>
 
-Generated `README.md`:
+Themes:
 
 <table>
 <tr>
