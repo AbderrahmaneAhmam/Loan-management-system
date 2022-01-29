@@ -65,7 +65,7 @@ Make sure you have [JDK](https://www.oracle.com/java/technologies/downloads/) in
 
 This project exists thanks to all the people who contribute.
 <a href="https://github.com/AbderrahmaneAhmam/loans-manager/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=AbderrahmaneAhmam/Website-Static-for-Cloud-Company" />
+  <img src="https://contrib.rocks/image?repo=AbderrahmaneAhmam/Loans-manager" />
 </a>
 
 
