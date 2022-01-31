@@ -1,4 +1,4 @@
-# Contributing to Loans Manager
+# Contributing to Loan Management System
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
