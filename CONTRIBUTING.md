@@ -14,16 +14,16 @@ To install the project you need to have `JAVA JDK` and `MySQL`
 
     ```sh
     # Clone your fork
-    git clone https://github.com/<your-username>/loans-manager.git
+    git clone https://github.com/<your-username>/Loan-management-system.git
 
     # Navigate to the newly cloned directory
-    cd Loans-Manager
+    cd Loan-management-system
     ```
 > Tip: Keep your `master` branch pointing at the original repository and make
 > pull requests from branches on your fork. To do this, run:
 >
 > ```sh
-> git remote add upstream https://github.com/AbderrahmaneAhmam/loans-manager.git
+> git remote add upstream https://github.com/AbderrahmaneAhmam/Loan-management-system.git
 > git fetch upstream
 > git branch --set-upstream-to=upstream/master master
 > ```
