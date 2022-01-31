@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Loans Manager 👋</h1>
+<h1 align="center">Welcome to Loan Management System 👋</h1>
 <p align="center">
   <a href="https://github.com/AbderrahmaneAhmam/Loans-manager/issues">
     <img alt="Issues: AbderrahmaneAhmam" src="https://img.shields.io/github/issues/AbderrahmaneAhmam/Loans-manager" target="_blank" />
